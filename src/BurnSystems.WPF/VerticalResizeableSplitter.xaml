@@ -16,7 +16,12 @@
         <Border HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 Background="Black" 
-                Grid.Column="1"></Border>
+                Grid.Column="1"
+                Cursor="SizeWE"
+                MouseDown="Border_MouseDown" 
+                MouseMove="Border_MouseMove"
+                MouseUp="Border_MouseUp"
+                x:Name="BorderContent"></Border>
         <ContentControl Grid.Column="2" x:Name="RightContent"/>
     </Grid>
 </UserControl>

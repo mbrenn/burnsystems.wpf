@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BurnSystems.WPF
 {
@@ -20,7 +10,10 @@ namespace BurnSystems.WPF
     /// </summary>
     public partial class VerticalResizeableSplitter : UserControl
     {
-        private double ratio = 0.5;
+        private bool _isMouseDown;
+        private double _ratio = 0.5;
+        private Point _lastPosition;
+        private double _movingRatio;
 
         public VerticalResizeableSplitter()
         {
@@ -29,7 +22,12 @@ namespace BurnSystems.WPF
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var totalWidth = e.NewSize.Width;
+            RecalculateColumnWidths();
+        }
+
+        private void RecalculateColumnWidths()
+        {
+            var totalWidth = ActualWidth;;
             if (totalWidth <= 2)
             {
                 return;
@@ -38,7 +36,7 @@ namespace BurnSystems.WPF
             var borderWidth = BorderColumn.Width.Value;
             totalWidth -= borderWidth;
 
-            var leftWidth = totalWidth * ratio;
+            var leftWidth = totalWidth * _ratio;
             var rightWidth = totalWidth - leftWidth;
 
             LeftColumn.Width = new GridLength(leftWidth, GridUnitType.Pixel);
@@ -49,6 +47,39 @@ namespace BurnSystems.WPF
         {
             LeftContent.Content = new TextBox();
             RightContent.Content = new TextBox();
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            BorderContent.CaptureMouse();
+
+            _isMouseDown = true;
+            _lastPosition = e.MouseDevice.GetPosition(this);
+            _movingRatio = _ratio;
+        }
+
+        private void Border_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isMouseDown)
+            {
+                var currentPosition = e.MouseDevice.GetPosition(this);
+
+                var diffX = currentPosition.X - _lastPosition.X;
+                _movingRatio += diffX / ActualWidth;
+                _ratio = Math.Max(0, Math.Min(1.0, _movingRatio));
+
+                RecalculateColumnWidths();
+                _lastPosition = currentPosition;
+            }
+        }
+
+        private void Border_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_isMouseDown)
+            {
+                _isMouseDown = false;
+                BorderContent.ReleaseMouseCapture();
+            }
         }
     }
 }
