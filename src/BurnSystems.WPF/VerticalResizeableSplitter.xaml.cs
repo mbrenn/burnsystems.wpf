@@ -5,6 +5,12 @@ using System.Windows.Input;
 
 namespace BurnSystems.WPF
 {
+    public enum SplitterMode
+    {
+        Horizontal, 
+        Vertical
+    }
+
     /// <summary>
     /// Interaktionslogik für VerticalResizeableSplitter.xaml
     /// </summary>
@@ -15,6 +21,8 @@ namespace BurnSystems.WPF
         private Point _lastPosition;
         private double _movingRatio;
 
+        public SplitterMode SplitterMode { get; set; } = SplitterMode.Vertical;
+
         public VerticalResizeableSplitter()
         {
             InitializeComponent();
@@ -23,6 +31,35 @@ namespace BurnSystems.WPF
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RecalculateColumnWidths();
+        }
+
+        /// <summary>
+        /// Sets the layout dependent on the current splitter mode
+        /// </summary>
+        private void SetLayout()
+        {
+            MainGrid.ColumnDefinitions.Clear();
+            MainGrid.RowDefinitions.Clear();
+
+            if (SplitterMode == SplitterMode.Vertical)
+            {
+                MainGrid.ColumnDefinitions.Add(
+                    new ColumnDefinition());
+                MainGrid.ColumnDefinitions.Add(
+                    new ColumnDefinition() {Width = new GridLength(2)});
+                MainGrid.ColumnDefinitions.Add(
+                    new ColumnDefinition());
+            }
+            else if (SplitterMode == SplitterMode.Horizontal)
+            {
+                MainGrid.RowDefinitions.Add(
+                    new RowDefinition());
+                MainGrid.RowDefinitions.Add(
+                    new RowDefinition() { Height = new GridLength(2) });
+                MainGrid.RowDefinitions.Add(
+                    new RowDefinition());
+
+            }
         }
 
         private void RecalculateColumnWidths()
