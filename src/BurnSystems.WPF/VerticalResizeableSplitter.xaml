@@ -5,23 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BurnSystems.WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" SizeChanged="UserControl_SizeChanged" Initialized="UserControl_Initialized">
+             d:DesignHeight="300" d:DesignWidth="300" SizeChanged="UserControl_SizeChanged" Initialized="UserControl_Initialized" Unloaded="UserControl_Unloaded"
+             >
     <Grid x:Name="MainGrid" x:FieldModifier="private">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="LeftColumn" x:FieldModifier="private"/>
-            <ColumnDefinition Width="2" x:Name="BorderColumn" x:FieldModifier="private"/>
-            <ColumnDefinition x:Name="RightColumn" x:FieldModifier="private"/>
-        </Grid.ColumnDefinitions>
         <ContentControl x:Name="LeftContent" />
         <Border HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 Background="Black" 
-                Grid.Column="1"
                 Cursor="SizeWE"
                 MouseDown="Border_MouseDown" 
                 MouseMove="Border_MouseMove"
                 MouseUp="Border_MouseUp"
                 x:Name="BorderContent"></Border>
-        <ContentControl Grid.Column="2" x:Name="RightContent"/>
+        <ContentControl x:Name="RightContent"/>
     </Grid>
 </UserControl>

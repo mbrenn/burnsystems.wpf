@@ -7,8 +7,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <bwpf:VerticalResizeableSplitter>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <bwpf:VerticalResizeableSplitter x:Name="Splitter" SplitterMode="Horizontal">
+            <bwpf:VerticalResizeableSplitter.FirstElement>
+                <TextBlock>abc</TextBlock>
+            </bwpf:VerticalResizeableSplitter.FirstElement>
+            <bwpf:VerticalResizeableSplitter.SecondElement>
+                <TextBlock>Tolles anderes Objekt</TextBlock>
+            </bwpf:VerticalResizeableSplitter.SecondElement>
+
         </bwpf:VerticalResizeableSplitter>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="VerticalButton" Click="VerticalButton_Click">Vertical</Button>
+            <Button x:Name="HorizontalButton" Margin="0,0,0,0.2" Click="HorizontalButton_Click">Horizontal</Button>
+        </StackPanel>
     </Grid>
 </Window>
