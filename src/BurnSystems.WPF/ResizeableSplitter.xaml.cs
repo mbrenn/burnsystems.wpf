@@ -22,9 +22,9 @@ namespace BurnSystems.WPF
     }
 
     /// <summary>
-    /// Interaktionslogik für VerticalResizeableSplitter.xaml
+    /// Interaktionslogik für ResizeableSplitter.xaml
     /// </summary>
-    public partial class VerticalResizeableSplitter : UserControl
+    public partial class ResizeableSplitter : UserControl
     {
         /// <summary>
         /// Defines the width/height of the border element, depending on the used orientation
@@ -43,22 +43,22 @@ namespace BurnSystems.WPF
         public static readonly DependencyProperty SplitterModeProperty = DependencyProperty.Register(
             "SplitterMode", 
             typeof(SplitterMode),
-            typeof(VerticalResizeableSplitter),
+            typeof(ResizeableSplitter),
             new FrameworkPropertyMetadata(
                 SplitterMode.Vertical, 
                 FrameworkPropertyMetadataOptions.AffectsRender,
-                (o, args) => ((VerticalResizeableSplitter)o).ResetLayout()));
+                (o, args) => ((ResizeableSplitter)o).ResetLayout()));
 
         public static readonly DependencyProperty FirstElementProperty = DependencyProperty.Register(
-            "FirstElement", typeof(UIElement), typeof(VerticalResizeableSplitter),
+            "FirstElement", typeof(UIElement), typeof(ResizeableSplitter),
             new PropertyMetadata(
                 default(UIElement),
-                (o, args) => ((VerticalResizeableSplitter) o).LeftContent.Content = args.NewValue));
+                (o, args) => ((ResizeableSplitter) o).LeftContent.Content = args.NewValue));
 
         public static readonly DependencyProperty SecondElementProperty = DependencyProperty.Register(
-            "SecondElement", typeof(UIElement), typeof(VerticalResizeableSplitter), new PropertyMetadata(
+            "SecondElement", typeof(UIElement), typeof(ResizeableSplitter), new PropertyMetadata(
                 default(UIElement),
-                (o, args) => ((VerticalResizeableSplitter) o).RightContent.Content = args.NewValue));
+                (o, args) => ((ResizeableSplitter) o).RightContent.Content = args.NewValue));
 
         /// <summary>
         /// Gets or sets the splitter mode
@@ -87,7 +87,7 @@ namespace BurnSystems.WPF
             set => SetValue(SecondElementProperty, value);
         }
 
-        public VerticalResizeableSplitter()
+        public ResizeableSplitter()
         {
             InitializeComponent();
         }

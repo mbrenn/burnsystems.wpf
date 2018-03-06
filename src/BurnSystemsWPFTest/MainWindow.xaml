@@ -11,18 +11,19 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <bwpf:VerticalResizeableSplitter x:Name="Splitter" SplitterMode="Horizontal">
-            <bwpf:VerticalResizeableSplitter.FirstElement>
+        <bwpf:ResizeableSplitter x:Name="Splitter" SplitterMode="Horizontal">
+            <bwpf:ResizeableSplitter.FirstElement>
                 <TextBlock>abc</TextBlock>
-            </bwpf:VerticalResizeableSplitter.FirstElement>
-            <bwpf:VerticalResizeableSplitter.SecondElement>
+            </bwpf:ResizeableSplitter.FirstElement>
+            <bwpf:ResizeableSplitter.SecondElement>
                 <TextBlock>Tolles anderes Objekt</TextBlock>
-            </bwpf:VerticalResizeableSplitter.SecondElement>
+            </bwpf:ResizeableSplitter.SecondElement>
 
-        </bwpf:VerticalResizeableSplitter>
+        </bwpf:ResizeableSplitter>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="VerticalButton" Click="VerticalButton_Click">Vertical</Button>
             <Button x:Name="HorizontalButton" Margin="0,0,0,0.2" Click="HorizontalButton_Click">Horizontal</Button>
         </StackPanel>
     </Grid>
 </Window>
+

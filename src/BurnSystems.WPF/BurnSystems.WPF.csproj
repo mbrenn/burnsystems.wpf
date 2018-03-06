@@ -47,12 +47,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="VerticalResizeableSplitter.xaml">
+    <Page Include="ResizeableSplitter.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="VerticalResizeableSplitter.xaml.cs">
-      <DependentUpon>VerticalResizeableSplitter.xaml</DependentUpon>
+    <Compile Include="ResizeableSplitter.xaml.cs">
+      <DependentUpon>ResizeableSplitter.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
