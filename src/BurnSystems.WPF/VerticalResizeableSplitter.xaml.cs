@@ -5,9 +5,19 @@ using System.Windows.Input;
 
 namespace BurnSystems.WPF
 {
+    /// <summary>
+    /// Defines the orientation of the splitter. 
+    /// </summary>
     public enum SplitterMode
     {
+        /// <summary>
+        /// The splitter is horizontal, so we have a top and a bottom element
+        /// </summary>
         Horizontal, 
+
+        /// <summary>
+        /// The splitter is vertical, so we have a left and a right element
+        /// </summary>
         Vertical
     }
 
@@ -16,6 +26,11 @@ namespace BurnSystems.WPF
     /// </summary>
     public partial class VerticalResizeableSplitter : UserControl
     {
+        /// <summary>
+        /// Defines the width/height of the border element, depending on the used orientation
+        /// </summary>
+        private const double BorderSize = 4.0;
+
         private bool _isMouseDown;
         private double _ratio = 0.5;
         private Point _lastPosition;
@@ -25,15 +40,29 @@ namespace BurnSystems.WPF
 
         private readonly RowDefinition[] _rowDefinitions = new RowDefinition[3];
 
-        public static readonly  DependencyProperty SplitterModeProperty = DependencyProperty.Register(
+        public static readonly DependencyProperty SplitterModeProperty = DependencyProperty.Register(
             "SplitterMode", 
             typeof(SplitterMode),
             typeof(VerticalResizeableSplitter),
             new FrameworkPropertyMetadata(
-                WPF.SplitterMode.Vertical, 
+                SplitterMode.Vertical, 
                 FrameworkPropertyMetadataOptions.AffectsRender,
                 (o, args) => ((VerticalResizeableSplitter)o).ResetLayout()));
 
+        public static readonly DependencyProperty FirstElementProperty = DependencyProperty.Register(
+            "FirstElement", typeof(UIElement), typeof(VerticalResizeableSplitter),
+            new PropertyMetadata(
+                default(UIElement),
+                (o, args) => ((VerticalResizeableSplitter) o).LeftContent.Content = args.NewValue));
+
+        public static readonly DependencyProperty SecondElementProperty = DependencyProperty.Register(
+            "SecondElement", typeof(UIElement), typeof(VerticalResizeableSplitter), new PropertyMetadata(
+                default(UIElement),
+                (o, args) => ((VerticalResizeableSplitter) o).RightContent.Content = args.NewValue));
+
+        /// <summary>
+        /// Gets or sets the splitter mode
+        /// </summary>
         public SplitterMode SplitterMode
         {
             get => (SplitterMode) GetValue(SplitterModeProperty);
@@ -41,21 +70,21 @@ namespace BurnSystems.WPF
         }
 
         /// <summary>
-        /// Gets or sets the UIElement being used as the first element. Left element, if vertical, top element, if horizontal
+        /// Gets or sets the content of the first element, which is the left or the top element
         /// </summary>
         public UIElement FirstElement
         {
-            get => LeftContent.Content as UIElement;
-            set => LeftContent.Content = value;
+            get => (UIElement) GetValue(FirstElementProperty);
+            set => SetValue(FirstElementProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the UIElement being used as the second element. Right element, if vertical, bottom element, if horizontal
+        /// Gets or sets the content of the second element, which is the left or the top element
         /// </summary>
         public UIElement SecondElement
         {
-            get => RightContent.Content as UIElement;
-            set => RightContent.Content = value;
+            get => (UIElement) GetValue(SecondElementProperty);
+            set => SetValue(SecondElementProperty, value);
         }
 
         public VerticalResizeableSplitter()
@@ -108,7 +137,7 @@ namespace BurnSystems.WPF
             if (SplitterMode == SplitterMode.Vertical)
             {
                 _columnDefinitions[0] = new ColumnDefinition();
-                _columnDefinitions[1] = new ColumnDefinition { Width = new GridLength(2) };
+                _columnDefinitions[1] = new ColumnDefinition { Width = new GridLength(BorderSize) };
                 _columnDefinitions[2] = new ColumnDefinition();
 
                 MainGrid.ColumnDefinitions.Add(_columnDefinitions[0]);
@@ -127,7 +156,7 @@ namespace BurnSystems.WPF
             else if (SplitterMode == SplitterMode.Horizontal)
             {
                 _rowDefinitions[0] = new RowDefinition();
-                _rowDefinitions[1] = new RowDefinition { Height = new GridLength(2) };
+                _rowDefinitions[1] = new RowDefinition { Height = new GridLength(BorderSize) };
                 _rowDefinitions[2] = new RowDefinition();
 
                 MainGrid.RowDefinitions.Add(_rowDefinitions[0]);
@@ -156,7 +185,7 @@ namespace BurnSystems.WPF
             if (SplitterMode == SplitterMode.Vertical)
             {
                 var totalWidth = ActualWidth;
-                if (totalWidth <= 2)
+                if (totalWidth <= BorderSize)
                 {
                     return;
                 }
@@ -173,7 +202,7 @@ namespace BurnSystems.WPF
             else if (SplitterMode == SplitterMode.Horizontal)
             {
                 var totalHeight = ActualHeight;
-                if (totalHeight <= 2)
+                if (totalHeight <= BorderSize)
                 {
                     return;
                 }

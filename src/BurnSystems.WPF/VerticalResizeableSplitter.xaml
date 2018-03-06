@@ -16,6 +16,8 @@
                 MouseDown="Border_MouseDown" 
                 MouseMove="Border_MouseMove"
                 MouseUp="Border_MouseUp"
+                BorderBrush="Gray"
+                BorderThickness="1"
                 x:Name="BorderContent"></Border>
         <ContentControl x:Name="RightContent"/>
     </Grid>
