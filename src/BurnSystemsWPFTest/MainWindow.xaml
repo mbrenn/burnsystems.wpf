@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BurnSystemsWPFTest"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
@@ -11,12 +10,12 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <bwpf:ResizeableSplitter x:Name="Splitter" SplitterMode="Horizontal">
+        <bwpf:ResizeableSplitter x:Name="Splitter" SplitterMode="Horizontal" SplitterColor="Red">
             <bwpf:ResizeableSplitter.FirstElement>
-                <TextBlock>abc</TextBlock>
+                <TextBlock TextWrapping="Wrap">abc</TextBlock>
             </bwpf:ResizeableSplitter.FirstElement>
             <bwpf:ResizeableSplitter.SecondElement>
-                <TextBlock>Tolles anderes Objekt</TextBlock>
+                <TextBlock TextWrapping="Wrap">Tolles anderes Objekt</TextBlock>
             </bwpf:ResizeableSplitter.SecondElement>
 
         </bwpf:ResizeableSplitter>

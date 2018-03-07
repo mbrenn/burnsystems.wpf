@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace BurnSystems.WPF
 {
@@ -36,8 +37,14 @@ namespace BurnSystems.WPF
         private Point _lastPosition;
         private double _movingRatio;
 
+        /// <summary>
+        /// Stores the definitions of the columns
+        /// </summary>
         private readonly ColumnDefinition[] _columnDefinitions = new ColumnDefinition[3];
 
+        /// <summary>
+        /// Stores the definition of the rows
+        /// </summary>
         private readonly RowDefinition[] _rowDefinitions = new RowDefinition[3];
 
         public static readonly DependencyProperty SplitterModeProperty = DependencyProperty.Register(
@@ -59,6 +66,11 @@ namespace BurnSystems.WPF
             "SecondElement", typeof(UIElement), typeof(ResizeableSplitter), new PropertyMetadata(
                 default(UIElement),
                 (o, args) => ((ResizeableSplitter) o).RightContent.Content = args.NewValue));
+
+        public static readonly DependencyProperty SplitterColorProperty = DependencyProperty.Register(
+            "SplitterColor", typeof(Brush), typeof(ResizeableSplitter), new PropertyMetadata(
+                Brushes.Black,
+                (o, args) => ((ResizeableSplitter) o).BorderContent.Background = (Brush) args.NewValue));
 
         /// <summary>
         /// Gets or sets the splitter mode
@@ -87,6 +99,18 @@ namespace BurnSystems.WPF
             set => SetValue(SecondElementProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets the color of the splitter element itself
+        /// </summary>
+        public Brush SplitterColor
+        {
+            get => (Brush)GetValue(SplitterColorProperty);
+            set => SetValue(SplitterColorProperty, value);
+        }
+
+        /// <summary>
+        /// Initializes a new element of the ResizeableSplitter
+        /// </summary>
         public ResizeableSplitter()
         {
             InitializeComponent();
@@ -116,6 +140,11 @@ namespace BurnSystems.WPF
             LostMouseCapture -= OnLostMouseCapture;
         }
 
+        /// <summary>
+        /// Called, when the size of the element was changed
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Arguments of the event</param>
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RecalculateContentSizes();
