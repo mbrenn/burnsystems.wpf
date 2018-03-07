@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
+    <Grid Margin="10" >
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
         <bwpf:ResizeableSplitter x:Name="Splitter" SplitterMode="Horizontal" SplitterColor="Red">
             <bwpf:ResizeableSplitter.FirstElement>
                 <TextBlock TextWrapping="Wrap">abc</TextBlock>
@@ -17,8 +18,8 @@
             <bwpf:ResizeableSplitter.SecondElement>
                 <TextBlock TextWrapping="Wrap">Tolles anderes Objekt</TextBlock>
             </bwpf:ResizeableSplitter.SecondElement>
-
         </bwpf:ResizeableSplitter>
+
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="VerticalButton" Click="VerticalButton_Click">Vertical</Button>
             <Button x:Name="HorizontalButton" Margin="0,0,0,0.2" Click="HorizontalButton_Click">Horizontal</Button>
