@@ -7,14 +7,14 @@ using System.Windows.Media;
 namespace BurnSystems.WPF
 {
     /// <summary>
-    /// Defines the orientation of the splitter. 
+    /// Defines the orientation of the splitter.
     /// </summary>
     public enum SplitterMode
     {
         /// <summary>
         /// The splitter is horizontal, so we have a top and a bottom element
         /// </summary>
-        Horizontal, 
+        Horizontal,
 
         /// <summary>
         /// The splitter is vertical, so we have a left and a right element
@@ -48,13 +48,13 @@ namespace BurnSystems.WPF
         private readonly RowDefinition[] _rowDefinitions = new RowDefinition[3];
 
         public static readonly DependencyProperty SplitterModeProperty = DependencyProperty.Register(
-            "SplitterMode", 
+            "SplitterMode",
             typeof(SplitterMode),
             typeof(ResizeableSplitter),
             new FrameworkPropertyMetadata(
-                SplitterMode.Vertical, 
+                SplitterMode.Vertical,
                 FrameworkPropertyMetadataOptions.AffectsRender,
-                (o, args) => ((ResizeableSplitter)o).ResetLayout()));
+                (o, args) => ((ResizeableSplitter) o).ResetLayout()));
 
         public static readonly DependencyProperty FirstElementProperty = DependencyProperty.Register(
             "FirstElement", typeof(UIElement), typeof(ResizeableSplitter),
@@ -104,7 +104,7 @@ namespace BurnSystems.WPF
         /// </summary>
         public Brush SplitterColor
         {
-            get => (Brush)GetValue(SplitterColorProperty);
+            get => (Brush) GetValue(SplitterColorProperty);
             set => SetValue(SplitterColorProperty, value);
         }
 
@@ -155,51 +155,51 @@ namespace BurnSystems.WPF
         /// </summary>
         internal void ResetLayout()
         {
-            if (!IsInitialized)
-            {
-                return;
-            }
+            if (!IsInitialized) return;
 
             MainGrid.ColumnDefinitions.Clear();
             MainGrid.RowDefinitions.Clear();
 
-            if (SplitterMode == SplitterMode.Vertical)
+            switch (SplitterMode)
             {
-                _columnDefinitions[0] = new ColumnDefinition();
-                _columnDefinitions[1] = new ColumnDefinition { Width = new GridLength(BorderSize) };
-                _columnDefinitions[2] = new ColumnDefinition();
+                case SplitterMode.Vertical:
+                    _columnDefinitions[0] = new ColumnDefinition();
+                    _columnDefinitions[1] = new ColumnDefinition {Width = new GridLength(BorderSize)};
+                    _columnDefinitions[2] = new ColumnDefinition();
 
-                MainGrid.ColumnDefinitions.Add(_columnDefinitions[0]);
-                MainGrid.ColumnDefinitions.Add(_columnDefinitions[1]);
-                MainGrid.ColumnDefinitions.Add(_columnDefinitions[2]);
+                    MainGrid.ColumnDefinitions.Add(_columnDefinitions[0]);
+                    MainGrid.ColumnDefinitions.Add(_columnDefinitions[1]);
+                    MainGrid.ColumnDefinitions.Add(_columnDefinitions[2]);
 
-                Grid.SetColumn(LeftContent, 0);
-                Grid.SetColumn(BorderContent, 1);
-                Grid.SetColumn(RightContent, 2);
-                Grid.SetRow(LeftContent, 0);
-                Grid.SetRow(BorderContent, 0);
-                Grid.SetRow(RightContent, 0);
+                    Grid.SetColumn(LeftContent, 0);
+                    Grid.SetColumn(BorderContent, 1);
+                    Grid.SetColumn(RightContent, 2);
+                    Grid.SetRow(LeftContent, 0);
+                    Grid.SetRow(BorderContent, 0);
+                    Grid.SetRow(RightContent, 0);
 
-                BorderContent.Cursor = Cursors.SizeWE;
-            }
-            else if (SplitterMode == SplitterMode.Horizontal)
-            {
-                _rowDefinitions[0] = new RowDefinition();
-                _rowDefinitions[1] = new RowDefinition { Height = new GridLength(BorderSize) };
-                _rowDefinitions[2] = new RowDefinition();
+                    BorderContent.Cursor = Cursors.SizeWE;
+                    break;
+                case SplitterMode.Horizontal:
+                    _rowDefinitions[0] = new RowDefinition();
+                    _rowDefinitions[1] = new RowDefinition {Height = new GridLength(BorderSize)};
+                    _rowDefinitions[2] = new RowDefinition();
 
-                MainGrid.RowDefinitions.Add(_rowDefinitions[0]);
-                MainGrid.RowDefinitions.Add(_rowDefinitions[1]);
-                MainGrid.RowDefinitions.Add(_rowDefinitions[2]);
+                    MainGrid.RowDefinitions.Add(_rowDefinitions[0]);
+                    MainGrid.RowDefinitions.Add(_rowDefinitions[1]);
+                    MainGrid.RowDefinitions.Add(_rowDefinitions[2]);
 
-                Grid.SetColumn(LeftContent, 0);
-                Grid.SetColumn(BorderContent, 0);
-                Grid.SetColumn(RightContent, 0);
-                Grid.SetRow(LeftContent, 0);
-                Grid.SetRow(BorderContent, 1);
-                Grid.SetRow(RightContent, 2);
+                    Grid.SetColumn(LeftContent, 0);
+                    Grid.SetColumn(BorderContent, 0);
+                    Grid.SetColumn(RightContent, 0);
+                    Grid.SetRow(LeftContent, 0);
+                    Grid.SetRow(BorderContent, 1);
+                    Grid.SetRow(RightContent, 2);
 
-                BorderContent.Cursor = Cursors.SizeNS;
+                    BorderContent.Cursor = Cursors.SizeNS;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             _ratio = _movingRatio = 0.5;
@@ -211,39 +211,40 @@ namespace BurnSystems.WPF
         /// </summary>
         private void RecalculateContentSizes()
         {
-            if (SplitterMode == SplitterMode.Vertical)
+            switch (SplitterMode)
             {
-                var totalWidth = ActualWidth;
-                if (totalWidth <= BorderSize)
+                case SplitterMode.Vertical:
                 {
-                    return;
+                    var totalWidth = ActualWidth;
+                    if (totalWidth <= BorderSize) return;
+
+                    var borderWidth = _columnDefinitions[1].Width.Value;
+                    totalWidth -= borderWidth;
+
+                    var leftWidth = totalWidth * _ratio;
+                    var rightWidth = totalWidth - leftWidth;
+
+                    _columnDefinitions[0].Width = new GridLength(leftWidth, GridUnitType.Pixel);
+                    _columnDefinitions[2].Width = new GridLength(rightWidth, GridUnitType.Pixel);
+                    break;
                 }
-
-                var borderWidth = _columnDefinitions[1].Width.Value;
-                totalWidth -= borderWidth;
-
-                var leftWidth = totalWidth * _ratio;
-                var rightWidth = totalWidth - leftWidth;
-
-                _columnDefinitions[0].Width = new GridLength(leftWidth, GridUnitType.Pixel);
-                _columnDefinitions[2].Width = new GridLength(rightWidth, GridUnitType.Pixel);
-            }
-            else if (SplitterMode == SplitterMode.Horizontal)
-            {
-                var totalHeight = ActualHeight;
-                if (totalHeight <= BorderSize)
+                case SplitterMode.Horizontal:
                 {
-                    return;
+                    var totalHeight = ActualHeight;
+                    if (totalHeight <= BorderSize) return;
+
+                    var borderHeight = _rowDefinitions[1].Height.Value;
+                    totalHeight -= borderHeight;
+
+                    var leftWidth = totalHeight * _ratio;
+                    var rightWidth = totalHeight - leftWidth;
+
+                    _rowDefinitions[0].Height = new GridLength(leftWidth, GridUnitType.Pixel);
+                    _rowDefinitions[2].Height = new GridLength(rightWidth, GridUnitType.Pixel);
+                    break;
                 }
-
-                var borderHeight = _rowDefinitions[1].Height.Value;
-                totalHeight -= borderHeight;
-
-                var leftWidth = totalHeight * _ratio;
-                var rightWidth = totalHeight - leftWidth;
-
-                _rowDefinitions[0].Height = new GridLength(leftWidth, GridUnitType.Pixel);
-                _rowDefinitions[2].Height = new GridLength(rightWidth, GridUnitType.Pixel);
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -267,25 +268,31 @@ namespace BurnSystems.WPF
 
         private void Border_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_isMouseDown)
-            {
-                var currentPosition = e.MouseDevice.GetPosition(this);
+            if (!_isMouseDown) return;
 
-                if (SplitterMode == SplitterMode.Vertical)
+            var currentPosition = e.MouseDevice.GetPosition(this);
+
+            switch (SplitterMode)
+            {
+                case SplitterMode.Vertical:
                 {
                     var diffX = currentPosition.X - _lastPosition.X;
                     _movingRatio += diffX / ActualWidth;
+                    break;
                 }
-                else if (SplitterMode == SplitterMode.Horizontal)
+                case SplitterMode.Horizontal:
                 {
                     var diffY = currentPosition.Y - _lastPosition.Y;
                     _movingRatio += diffY / ActualHeight;
+                    break;
                 }
-
-                _ratio = Math.Max(0, Math.Min(1.0, _movingRatio));
-                RecalculateContentSizes();
-                _lastPosition = currentPosition;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+
+            _ratio = Math.Max(0, Math.Min(1.0, _movingRatio));
+            RecalculateContentSizes();
+            _lastPosition = currentPosition;
         }
 
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
