@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using BurnSystems.Logging;
@@ -11,7 +12,7 @@ namespace BurnSystems.WPF
     /// </summary>
     public class TextBlockLogProvider : ILogProvider
     {
-        private TextBlock _textBlock;
+        private readonly TextBlock _textBlock;
 
         public TextBlockLogProvider(TextBlock textBlock)
         {
@@ -20,7 +21,13 @@ namespace BurnSystems.WPF
 
         public void LogMessage(LogMessage logMessage)
         {
-            _textBlock.Dispatcher.Invoke(() => { _textBlock.Text = logMessage.ToString(); });
+            Debug.Assert(_textBlock.Dispatcher != null, "_textBlock.Dispatcher != null");
+
+            _textBlock.Dispatcher.Invoke(() =>
+            {
+                _textBlock.Text =
+                    $"[{logMessage.LogLevel}]: {logMessage.Message}";
+            });
         }
     }
 }
