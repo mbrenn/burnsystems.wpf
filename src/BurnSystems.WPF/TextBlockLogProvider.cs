@@ -23,7 +23,7 @@ namespace BurnSystems.WPF
         {
             Debug.Assert(_textBlock.Dispatcher != null, "_textBlock.Dispatcher != null");
 
-            _textBlock.Dispatcher.Invoke(() =>
+            _textBlock.Dispatcher.InvokeAsync(() =>
             {
                 _textBlock.Text =
                     $"[{logMessage.LogLevel}]: {logMessage.Message}";
