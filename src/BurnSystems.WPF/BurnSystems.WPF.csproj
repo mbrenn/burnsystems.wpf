@@ -4,6 +4,10 @@
     <OutputType>library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWPF>true</UseWPF>
+<<<<<<< Updated upstream
+=======
+    <TargetFrameworks>net462;netcoreapp3.1</TargetFrameworks>
+>>>>>>> Stashed changes
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BurnSystems\src\BurnSystems\BurnSystems.csproj" />
